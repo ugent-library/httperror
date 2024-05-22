@@ -1,3 +1,3 @@
 module github.com/ugent-library/httperror
 
-go 1.19
+go 1.20

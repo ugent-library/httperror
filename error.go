@@ -9,47 +9,47 @@ import (
 
 var (
 	// 4xx
-	BadRequest                   = &Error{http.StatusBadRequest}
-	Unauthorized                 = &Error{http.StatusUnauthorized}
-	PaymentRequired              = &Error{http.StatusPaymentRequired}
-	Forbidden                    = &Error{http.StatusForbidden}
-	NotFound                     = &Error{http.StatusNotFound}
-	MethodNotAllowed             = &Error{http.StatusMethodNotAllowed}
-	NotAcceptable                = &Error{http.StatusNotAcceptable}
-	ProxyAuthRequired            = &Error{http.StatusProxyAuthRequired}
-	RequestTimeout               = &Error{http.StatusRequestTimeout}
-	Conflict                     = &Error{http.StatusConflict}
-	Gone                         = &Error{http.StatusGone}
-	LengthRequired               = &Error{http.StatusLengthRequired}
-	PreconditionFailed           = &Error{http.StatusPreconditionFailed}
-	RequestEntityTooLarge        = &Error{http.StatusRequestEntityTooLarge}
-	RequestURITooLong            = &Error{http.StatusRequestURITooLong}
-	UnsupportedMediaType         = &Error{http.StatusUnsupportedMediaType}
-	RequestedRangeNotSatisfiable = &Error{http.StatusRequestedRangeNotSatisfiable}
-	ExpectationFailed            = &Error{http.StatusExpectationFailed}
-	Teapot                       = &Error{http.StatusTeapot}
-	MisdirectedRequest           = &Error{http.StatusMisdirectedRequest}
-	UnprocessableEntity          = &Error{http.StatusUnprocessableEntity}
-	Locked                       = &Error{http.StatusLocked}
-	FailedDependency             = &Error{http.StatusFailedDependency}
-	TooEarly                     = &Error{http.StatusTooEarly}
-	UpgradeRequired              = &Error{http.StatusUpgradeRequired}
-	PreconditionRequired         = &Error{http.StatusPreconditionRequired}
-	TooManyRequests              = &Error{http.StatusTooManyRequests}
-	RequestHeaderFieldsTooLarge  = &Error{http.StatusRequestHeaderFieldsTooLarge}
-	UnavailableForLegalReasons   = &Error{http.StatusUnavailableForLegalReasons}
+	BadRequest                   = &Error{StatusCode: http.StatusBadRequest}
+	Unauthorized                 = &Error{StatusCode: http.StatusUnauthorized}
+	PaymentRequired              = &Error{StatusCode: http.StatusPaymentRequired}
+	Forbidden                    = &Error{StatusCode: http.StatusForbidden}
+	NotFound                     = &Error{StatusCode: http.StatusNotFound}
+	MethodNotAllowed             = &Error{StatusCode: http.StatusMethodNotAllowed}
+	NotAcceptable                = &Error{StatusCode: http.StatusNotAcceptable}
+	ProxyAuthRequired            = &Error{StatusCode: http.StatusProxyAuthRequired}
+	RequestTimeout               = &Error{StatusCode: http.StatusRequestTimeout}
+	Conflict                     = &Error{StatusCode: http.StatusConflict}
+	Gone                         = &Error{StatusCode: http.StatusGone}
+	LengthRequired               = &Error{StatusCode: http.StatusLengthRequired}
+	PreconditionFailed           = &Error{StatusCode: http.StatusPreconditionFailed}
+	RequestEntityTooLarge        = &Error{StatusCode: http.StatusRequestEntityTooLarge}
+	RequestURITooLong            = &Error{StatusCode: http.StatusRequestURITooLong}
+	UnsupportedMediaType         = &Error{StatusCode: http.StatusUnsupportedMediaType}
+	RequestedRangeNotSatisfiable = &Error{StatusCode: http.StatusRequestedRangeNotSatisfiable}
+	ExpectationFailed            = &Error{StatusCode: http.StatusExpectationFailed}
+	Teapot                       = &Error{StatusCode: http.StatusTeapot}
+	MisdirectedRequest           = &Error{StatusCode: http.StatusMisdirectedRequest}
+	UnprocessableEntity          = &Error{StatusCode: http.StatusUnprocessableEntity}
+	Locked                       = &Error{StatusCode: http.StatusLocked}
+	FailedDependency             = &Error{StatusCode: http.StatusFailedDependency}
+	TooEarly                     = &Error{StatusCode: http.StatusTooEarly}
+	UpgradeRequired              = &Error{StatusCode: http.StatusUpgradeRequired}
+	PreconditionRequired         = &Error{StatusCode: http.StatusPreconditionRequired}
+	TooManyRequests              = &Error{StatusCode: http.StatusTooManyRequests}
+	RequestHeaderFieldsTooLarge  = &Error{StatusCode: http.StatusRequestHeaderFieldsTooLarge}
+	UnavailableForLegalReasons   = &Error{StatusCode: http.StatusUnavailableForLegalReasons}
 	// 5xx
-	InternalServerError           = &Error{http.StatusInternalServerError}
-	NotImplemented                = &Error{http.StatusNotImplemented}
-	BadGateway                    = &Error{http.StatusBadGateway}
-	ServiceUnavailable            = &Error{http.StatusServiceUnavailable}
-	GatewayTimeout                = &Error{http.StatusGatewayTimeout}
-	HTTPVersionNotSupported       = &Error{http.StatusHTTPVersionNotSupported}
-	VariantAlsoNegotiates         = &Error{http.StatusVariantAlsoNegotiates}
-	InsufficientStorage           = &Error{http.StatusInsufficientStorage}
-	LoopDetected                  = &Error{http.StatusLoopDetected}
-	NotExtended                   = &Error{http.StatusNotExtended}
-	NetworkAuthenticationRequired = &Error{http.StatusNetworkAuthenticationRequired}
+	InternalServerError           = &Error{StatusCode: http.StatusInternalServerError}
+	NotImplemented                = &Error{StatusCode: http.StatusNotImplemented}
+	BadGateway                    = &Error{StatusCode: http.StatusBadGateway}
+	ServiceUnavailable            = &Error{StatusCode: http.StatusServiceUnavailable}
+	GatewayTimeout                = &Error{StatusCode: http.StatusGatewayTimeout}
+	HTTPVersionNotSupported       = &Error{StatusCode: http.StatusHTTPVersionNotSupported}
+	VariantAlsoNegotiates         = &Error{StatusCode: http.StatusVariantAlsoNegotiates}
+	InsufficientStorage           = &Error{StatusCode: http.StatusInsufficientStorage}
+	LoopDetected                  = &Error{StatusCode: http.StatusLoopDetected}
+	NotExtended                   = &Error{StatusCode: http.StatusNotExtended}
+	NetworkAuthenticationRequired = &Error{StatusCode: http.StatusNetworkAuthenticationRequired}
 )
 
 type Error struct {
@@ -57,5 +57,9 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("http error: %d %s", e.StatusCode, http.StatusText(e.StatusCode))
+	return fmt.Sprintf("http error %d (%s)", e.StatusCode, http.StatusText(e.StatusCode))
+}
+
+func (e *Error) Wrap(err error) error {
+	return fmt.Errorf("%w: %w", e, err)
 }
